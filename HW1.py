@@ -49,18 +49,21 @@ with open(cwb_filename) as csvfile:
 
 # Retrive ten data points from the beginning.
 
+for v in data[:]:
+    if v['WDSD']=='-99.000' or v['WDSD']=='-999.000':
+        data.remove(v)
+        
 ids=['C0A880','C0F9A0','C0G640','C0R190','C0X260']
 target_data=[]
 for i in range(len(ids)):
     list1=[v for v in data if v['station_id'] == ids[i]]
-    Max=max(list1, key=lambda x: x['WDSD'] )
-    Min=min(list1, key=lambda x: x['WDSD'])
-    if Max['WDSD']!='-99.000' and Max['WDSD']!='-999.000'and Min['WDSD']!='-99.000' and Min['WDSD']!='-999.000':
-        list1=[ids[i],abs(float(Max['WDSD'])-float(Min['WDSD']))]
-    else:
+    if len(list1)==0 or len(list1)==1:
         list1=[ids[i],'None']
+    else:
+        Max=max(list1, key=lambda x: x['WDSD'])
+        Min=min(list1, key=lambda x: x['WDSD'])
+        list1=[ids[i],abs(float(Max['WDSD'])-float(Min['WDSD']))]
     target_data.append(list1)
-
 
 #=======================================
 
